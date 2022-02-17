@@ -190,6 +190,17 @@ class FlutterBlue {
     await _channel.invokeMethod('setLogLevel', level.index);
     _logLevel = level;
   }
+  
+    void startForegroundService() async {
+    print("Starting foreground service !");
+    await _channel.invokeMethod('startService', <String, dynamic>{
+      'icon': 'to change',
+    });
+  }
+
+  void stopForegroundService() async {
+    await _channel.invokeMethod('stopService');
+  }
 
   void _log(LogLevel level, String message) {
     if (level.index <= _logLevel.index) {

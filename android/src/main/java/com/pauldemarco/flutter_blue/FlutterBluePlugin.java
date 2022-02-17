@@ -31,6 +31,8 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.ParcelUuid;
 import android.util.Log;
+import android.os.Bundle;
+import android.os.Binder;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -87,6 +89,9 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
     private Result pendingResult;
     private ArrayList<String> macDeviceScanned = new ArrayList<>();
     private boolean allowDuplicates = false;
+	
+	public final static String START_FOREGROUND_ACTION = "com.pauldemarco.flutter_blue.action.startforeground";
+    public final static String STOP_FOREGROUND_ACTION = "ccom.pauldemarco.flutter_blue.action.stopforeground";
 
     /** Plugin registration. */
     public static void registerWith(Registrar registrar) {
@@ -626,7 +631,32 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
 
                 break;
             }
+            case "startService":
+                final String icon = call.argument("icon");
 
+                Intent intent = new Intent(context, ForegroundService.class);
+                intent.setAction(START_FOREGROUND_ACTION);
+                intent.putExtra("title", "Oxyflex bluetooth");
+                intent.putExtra("icon", icon);
+                intent.putExtra("content", "Execution du bluetooth en background");
+                intent.putExtra("subtext", "subtext");
+                intent.putExtra("chronometer", "chronometer");
+                intent.putExtra("stop_action", "stopAction");
+                intent.putExtra("stop_icon", "stopIcon");
+                intent.putExtra("stop_text", "stopText");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    context.startForegroundService(intent);
+                } else {
+                    context.startService(intent);
+                }
+                result.success(null);
+                break;
+            case "stopService":
+                intent = new Intent(activity, ForegroundService.class);
+                intent.setAction(STOP_FOREGROUND_ACTION);
+                activity.stopService(intent);
+                result.success(null);
+                break;
             default:
             {
                 result.notImplemented();
