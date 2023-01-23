@@ -131,6 +131,7 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
     @Override
     public void onDetachedFromActivity() {
         tearDown();
+
     }
 
     @Override
@@ -171,6 +172,12 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
     }
 
     private void tearDown() {
+
+        for (Map.Entry<String, BluetoothDeviceCache> entry : mDevices.entrySet()) {
+            BluetoothDeviceCache device = entry.getValue();
+            device.gatt.disconnect();
+        }
+
         Log.i(TAG, "teardown");
         context = null;
         activityBinding.removeRequestPermissionsResultListener(this);
@@ -182,6 +189,12 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
         mBluetoothAdapter = null;
         mBluetoothManager = null;
         application = null;
+
+        // Stop foreground ble service
+        Log.i(TAG, "Stopping foreground service");
+        Intent intent = new Intent(activity, ForegroundService.class);
+        intent.setAction(STOP_FOREGROUND_ACTION);
+        activity.stopService(intent);
     }
 
 
