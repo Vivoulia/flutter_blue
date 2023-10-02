@@ -168,6 +168,32 @@ class FlutterBlue {
     return _scanResults.value;
   }
 
+  Future startPeriodicScan({
+    ScanMode scanMode = ScanMode.lowLatency,
+    List<Guid> withServices = const [],
+    List<Guid> withDevices = const [],
+    Duration? timeout,
+    bool allowDuplicates = false,
+    required Duration restartDuration,
+  }) async {
+    await scan(
+        scanMode: scanMode,
+        withServices: withServices,
+        withDevices: withDevices,
+        timeout: timeout,
+        allowDuplicates: allowDuplicates)
+        .drain();
+    Future.delayed(restartDuration, () {
+      startPeriodicScan(
+          withServices: withServices,
+          withDevices: withDevices,
+          timeout: timeout,
+          allowDuplicates: allowDuplicates,
+          restartDuration: restartDuration); // Prints after 1 second.
+    });
+    return _scanResults.value;
+  }
+
   /// Stops a scan for Bluetooth Low Energy devices
   Future stopScan() async {
     await _channel.invokeMethod('stopScan');
