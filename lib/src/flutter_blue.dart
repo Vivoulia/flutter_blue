@@ -176,22 +176,18 @@ class FlutterBlue {
     bool allowDuplicates = false,
     required Duration restartDuration,
   }) async {
-    await scan(
-        scanMode: scanMode,
-        withServices: withServices,
-        withDevices: withDevices,
-        timeout: timeout,
-        allowDuplicates: allowDuplicates)
-        .drain();
-    Future.delayed(restartDuration, () {
-      startPeriodicScan(
-          withServices: withServices,
-          withDevices: withDevices,
-          timeout: timeout,
-          allowDuplicates: allowDuplicates,
-          restartDuration: restartDuration); // Prints after 1 second.
-    });
-    return _scanResults.value;
+    Timer timer = Timer.periodic(
+      const Duration(
+        seconds: 60, //You can change second to milisecond etc
+      ),
+          (t) => scan(
+              scanMode: scanMode,
+              withServices: withServices,
+              withDevices: withDevices,
+              timeout: timeout,
+              allowDuplicates: allowDuplicates)
+              .drain()
+    );
   }
 
   /// Stops a scan for Bluetooth Low Energy devices
