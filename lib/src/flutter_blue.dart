@@ -176,10 +176,7 @@ class FlutterBlue {
     bool allowDuplicates = false,
     required Duration restartDuration,
   }) async {
-    Timer timer = Timer.periodic(
-      const Duration(
-        seconds: 60, //You can change second to milisecond etc
-      ),
+    Timer timer = Timer.periodic(restartDuration,
           (t) => scan(
               scanMode: scanMode,
               withServices: withServices,
