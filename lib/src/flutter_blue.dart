@@ -179,7 +179,7 @@ class FlutterBlue {
     bool allowDuplicates = false,
     required Duration restartDuration,
   }) async {
-    if (_timerPeriodicScan != null) {
+    if (_timerPeriodicScan == null) {
       _cancel = false;
       _timerPeriodicScan = Timer.periodic(restartDuration, (Timer t) {
         if(_cancel) {
