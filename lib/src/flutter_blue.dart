@@ -24,6 +24,8 @@ class FlutterBlue {
   static FlutterBlue _instance = new FlutterBlue._();
   static FlutterBlue get instance => _instance;
 
+  Timer? _timerPeriodicScan;
+
   /// Log level of the instance, default is all messages (debug).
   LogLevel _logLevel = LogLevel.debug;
   LogLevel get logLevel => _logLevel;
@@ -176,7 +178,7 @@ class FlutterBlue {
     bool allowDuplicates = false,
     required Duration restartDuration,
   }) async {
-    Timer timer = Timer.periodic(restartDuration,
+    _timerPeriodicScan = Timer.periodic(restartDuration,
           (t) => scan(
               scanMode: scanMode,
               withServices: withServices,
@@ -185,6 +187,10 @@ class FlutterBlue {
               allowDuplicates: allowDuplicates)
               .drain()
     );
+  }
+
+  Future stopPeriodicScan() async {
+    _timerPeriodicScan?.cancel();
   }
 
   /// Stops a scan for Bluetooth Low Energy devices
