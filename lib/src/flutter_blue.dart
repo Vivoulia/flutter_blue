@@ -185,6 +185,7 @@ class FlutterBlue {
         if(_cancel) {
           t.cancel();
         } else {
+          print("[flutter blue] Starting periodic scan");
           scan(
               scanMode: scanMode,
               withServices: withServices,
