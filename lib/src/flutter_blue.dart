@@ -25,6 +25,7 @@ class FlutterBlue {
   static FlutterBlue get instance => _instance;
 
   Timer? _timerPeriodicScan;
+  bool _cancel = false;
 
   /// Log level of the instance, default is all messages (debug).
   LogLevel _logLevel = LogLevel.debug;
@@ -179,23 +180,28 @@ class FlutterBlue {
     required Duration restartDuration,
   }) async {
     if (_timerPeriodicScan != null) {
-      _timerPeriodicScan = Timer.periodic(restartDuration,
-              (t) => scan(
+      _cancel = false;
+      _timerPeriodicScan = Timer.periodic(restartDuration, (Timer t) {
+        if(_cancel) {
+          t.cancel();
+        } else {
+          scan(
               scanMode: scanMode,
               withServices: withServices,
               withDevices: withDevices,
               timeout: timeout,
               allowDuplicates: allowDuplicates)
-              .drain()
-      );
-    }
-    else {
+              .drain();
+        }
+      });
+    } else {
       print("Periodic Scan already in progress call stopPeriodicScan() first");
     }
   }
 
   Future stopPeriodicScan() async {
     _timerPeriodicScan?.cancel();
+    _cancel = true;
     _timerPeriodicScan = null;
   }
 
@@ -221,8 +227,8 @@ class FlutterBlue {
     await _channel.invokeMethod('setLogLevel', level.index);
     _logLevel = level;
   }
-  
-    void startForegroundService() async {
+
+  void startForegroundService() async {
     print("Starting foreground service !");
     await _channel.invokeMethod('startService', <String, dynamic>{
       'icon': 'to change',
