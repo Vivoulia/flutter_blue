@@ -191,6 +191,7 @@ class FlutterBlue {
 
   Future stopPeriodicScan() async {
     _timerPeriodicScan?.cancel();
+    _timerPeriodicScan = null;
   }
 
   /// Stops a scan for Bluetooth Low Energy devices
