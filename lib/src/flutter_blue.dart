@@ -178,15 +178,20 @@ class FlutterBlue {
     bool allowDuplicates = false,
     required Duration restartDuration,
   }) async {
-    _timerPeriodicScan = Timer.periodic(restartDuration,
-          (t) => scan(
+    if (_timerPeriodicScan != null) {
+      _timerPeriodicScan = Timer.periodic(restartDuration,
+              (t) => scan(
               scanMode: scanMode,
               withServices: withServices,
               withDevices: withDevices,
               timeout: timeout,
               allowDuplicates: allowDuplicates)
               .drain()
-    );
+      );
+    }
+    else {
+      print("Periodic Scan already in progress call stopPeriodicScan() first");
+    }
   }
 
   Future stopPeriodicScan() async {
