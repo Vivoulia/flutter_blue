@@ -200,7 +200,7 @@ class FlutterBlue {
     }
   }
 
-  Future stopPeriodicScan() async {
+  void stopPeriodicScan() {
     print("[Flutter blue] stopPeriodicScan ");
     _timerPeriodicScan?.cancel();
     _cancel = true;
