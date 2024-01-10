@@ -31,7 +31,7 @@ public class ForegroundService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         PackageManager pm = getApplicationContext().getPackageManager();
         Intent notificationIntent = pm.getLaunchIntentForPackage(getApplicationContext().getPackageName());
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
 
         Bundle bundle = intent.getExtras();
 
