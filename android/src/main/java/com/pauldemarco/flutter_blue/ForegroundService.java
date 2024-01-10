@@ -31,7 +31,7 @@ public class ForegroundService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         PackageManager pm = getApplicationContext().getPackageManager();
         Intent notificationIntent = pm.getLaunchIntentForPackage(getApplicationContext().getPackageName());
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE);
 
         Bundle bundle = intent.getExtras();
 
@@ -52,7 +52,7 @@ public class ForegroundService extends Service {
         Intent stopSelf = new Intent(this, ForegroundService.class);
         stopSelf.setAction(STOP_FOREGROUND_ACTION);
 
-        PendingIntent pStopSelf = PendingIntent.getService(this, 0, stopSelf ,PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pStopSelf = PendingIntent.getService(this, 0, stopSelf ,PendingIntent.FLAG_CANCEL_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_baseline_bluetooth_24)
