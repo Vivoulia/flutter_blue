@@ -52,7 +52,7 @@ public class ForegroundService extends Service {
         Intent stopSelf = new Intent(this, ForegroundService.class);
         stopSelf.setAction(STOP_FOREGROUND_ACTION);
 
-        PendingIntent pStopSelf = PendingIntent.getService(this, 0, stopSelf ,PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pStopSelf = PendingIntent.getService(this, 0, stopSelf ,PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_baseline_bluetooth_24)
